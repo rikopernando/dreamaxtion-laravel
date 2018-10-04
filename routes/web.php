@@ -12,7 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'message' => 'Welcome To GitHub Jobs API' 
+    ],200);
 });
 
 Auth::routes();

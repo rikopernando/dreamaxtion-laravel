@@ -1,51 +1,137 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Github Jobs API build with Laravel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+### Instalasi
 
-## About Laravel
+Kita membutuhkan Composer untuk menginstall Laravel. Disini Composer berfungi untuk mengelola dependensinya. Kita bisa mendownload composer [disini](https://getcomposer.org/).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Siapkan juga Server Requirements nya.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* PHP >= 7.1.3
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+* Ctype PHP Extension
+* JSON PHP Extension
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+Selanjutnya kita harus menduplikasi repository ini dengan cara **git clone [url]**. Jalankan perintah berikut pada terminal:
 
-## Learning Laravel
+> git clone https://github.com/rikopernando/dreamaxtion-laravel.git
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+Perintah ini akan menduplikasi repository ini ke directory local kita. Silahkan masuk ke directory tersebut dengan cara:
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+> cd dreamaxtion-laravel
 
-## Laravel Sponsors
+Kemudian jalankan perintah berikut:
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+> composer installl
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+Setelah selesai kita harus mengatur permission folder **storage** dan **bootstrap/cache**. Jalankan perintah berikut:
 
-## Contributing
+```
+sudo chmod -R 777 storage
+sudo chmod -R 777 bootstrap/cache
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+### Konfigurasi Database
 
-## Security Vulnerabilities
+Silakan buka file .env.example dan copy isinya ke file .env , jika belum ada, silakan buat file nya manual. Masukan nama database, username dan password yang akan kita gunakan.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+```
+DB_DATABASE=nama_database
+DB_USERNAME=root
+DB_PASSWORD=password
+```
 
-## License
+Dan jangan lupa untuk mengatur application key, karena jika sampai terlewati **session dan data terenskripsi** lainnya tidak akan aman. Caranya jalankan perintah berikut:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+``` 
+php artisan key:generate
+```
+
+Serta jalankan migration dan seeder yang telah ada
+
+```
+php artisan migrate:refresh --seed
+```
+
+
+### Usage
+
+Kita akan menggunankan Local **Development Server** untuk mengakses API ini. Silakan jalankan perintah ini:
+
+```
+php artisan serve
+```
+
+maka output yang dihasilkan akan seperti ini:
+
+> Laravel development server started: <http://127.0.0.1:8000>
+
+ini artinya kita akan memulai server pengembangan di http: // localhost: 8000.
+
+Silakan kunjungi http: // localhost: 8000.
+
+![af](https://i.imgsafe.org/6d/6da618bb36.png)
+
+### Autentikasi API Token
+
+Untuk mengamankan endpoint API, kita akan menggunakan metode API Token.
+
+Sekarang mari kita coba panggil API endpoint yang sudah ada, diantarnya sebagai berikut:
+
+Route | HTTP | Description
+------------ | -------------| -------------|
+/api/jobs | GET | Untuk melihat daftar pekerjaan yang tersedia
+/api/jobs/search | GET | Untuk mencari daftar pekerjaan yang tersedia secara detail
+
+Untuk mencari daftar pekerjaan, anda bisa mencari berdasarkan full time, lokasi, full time atau part time, atau kombinasi dari ketiganya. Semua parameter bersifat opsional.
+
+Paramaters | Description
+------------ | -------------
+description | Deskripsi pekerjaan, misal : "ruby" atau "JavaScript"
+location | Nama kota, kode pos, atau yang berkaitan dengan lokasi
+lat | lintang tertentu. Jika digunakan, Anda juga harus mengirim panjang dan tidak boleh mengirim lokasi.
+long | Bujur spesifik. Jika digunakan, Anda juga harus mengirim lat dan tidak boleh mengirim lokasi.
+fulltime | Jika ingin membatasi hasil ke posisi fulltime, atur parameter ini ke 'true'.
+
+#### Contoh
+* http://localhost:8000/api/jobs/search?description=python&location=sf&full_time=true
+* http://localhost:8000/api/jobs/search?lat=37.3229978&long=-122.0321823
+
+Kita juga bisa menggunakan pagination, secara default pagination sama dengan 0.
+
+#### Contoh
+* http://localhost:8000/api/jobs/search?description=ruby&page=1
+
+Sekarang mari kita uji dengan menggunakan Postman atau Curl.
+
+![af](https://i.imgsafe.org/6e/6e342619ba.png)
+
+Hasil nya "error": "Unauthenticated" . itu karena tidak ada record user dengan api_token xxx.
+
+Sekarang coba lagi jalankan request di postman seperti contoh sebelumnya, tapi dengan api_token yang valid.
+
+Untuk mendapatkan api_token silahkan melihat di database masing masing (menggunakan PHPMyAdmin, Sequel Pro, MySQL Workbench, etc).
+
+Uji coba pertama dengan api token yang valid
+
+![af](https://i.imgsafe.org/6e/6e6941a5fc.png)
+
+Uji kedua dengan api token serta dengan pencarian description jobs
+
+![af](https://i.imgsafe.org/6e/6e716cd3ff.png)
+
+Setiap request ke url / route yang menggunakan middleware api:auth maka harus menyertakan header Authorization dengan parameter Bearer **apitokenkamu**.
+
+![af](https://i.imgsafe.org/6e/6e796d9632.png)
+
+dan juga perlu diperhatikan disini kita membatasi akses ke API hanya 10 kali dalam 5 menit.
+
+
+
+
+
+
+
